@@ -1,0 +1,12 @@
+-k create namespace cka-task2 --dry-run=client -o yaml > task2-namespace.yaml
+-k create -f task2-namespace.yaml
+-k run nginx --image=nginx --namespace=cka-task2 --dry-run=client -o yaml > task2-pod.yaml
+
+*edited*
+-k apply -f task2-pod.yaml
+-k expose pod nginx --port=9000 --target-port-8080 --name=nginx-svc --namespace=cka-task2 --dry-run=client -o yaml > nginx-svc.yaml
+-k apply -f nginx-svc.yaml
+-k run busybox --image=busybox --namespace=cka-task2 -- sleep 100000
+-kubectl exec busybox -n cka-task2 -- wget -O- nginx-svc:9000
+-kubectl delete pod busybox -n cka-task2
+
