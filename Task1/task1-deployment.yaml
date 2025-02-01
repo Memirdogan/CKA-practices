@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: task1
+  name: task1
+  namespace: cka-task1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: task1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: task1
+    spec:
+      containers:
+      - name: task1-app
+        image: busybox
+        command: ["/bin/sh", "-c", "while true; do echo \"[INFO][STDOUT] current time is: $(date)\"; echo \"[INFO][FILELOG] current time is: $(date)\" >> /var/log/app.log; sleep 5; done"]
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log
+
+      - name: task1-sidecar
+        image: busybox
+        command: ["/bin/sh", "-c", "tail -n+1 -F /var/log/app.log"]
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/log
+
+      volumes:
+      - name: log-volume
+        emptyDir: {}
