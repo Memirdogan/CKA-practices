@@ -1,0 +1,9 @@
+= TASK1 =
+Create a new namespace called cka-task1 with kubectl
+Write the kubectl command to create the YAML definition for the namespace you created in step 1 to task1-commands
+Create a new deployment task1 in the namespace cka-task1 with 1 replica.
+There should be two containers one named task1-app and one named task1-sidecar both containers should use the `busybox` image.
+The `app` container should run the following command: ['/bin/sh', '-c', 'while true; do echo "[INFO][STDOUT] current time is: $(date)"; echo "[INFO][FILELOG] current time is: $(date)" >> /var/log/app.log; sleep 5; done']
+The `sidecar` container should run the following command: [/bin/sh, -c, 'tail -n+1 -F /var/log/app.log']
+- Write the commands to see the container logs for each container in separate lines to task1-commands
+BONUS: add an emptyDir volume to the pod and mount it to both containers on path /var/log so that the error in the logs is fixed.
